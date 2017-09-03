@@ -2,4 +2,6 @@
 
 
 notes:
-Unity 2017.1.0f3
+Python 2.7
+Opencv
+pep8

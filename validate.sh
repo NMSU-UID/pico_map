@@ -4,4 +4,4 @@
 # TODO: Setup up git hooks to run validation on pre commit
 
 #run python validator
-find ./ -name '*.py' | xargs pep8
+find ./ -name '*.py' | xargs pep8 -v
