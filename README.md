@@ -1,7 +1,7 @@
 
 
 
-notes: 
-Python 2.7 
-Opencv 
-pep8 
+notes: <br />
+Python 2.7 <br />
+Opencv <br />
+pep8 <br />
