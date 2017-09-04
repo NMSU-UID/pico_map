@@ -1,4 +1,4 @@
-#Pico Map
+# Pico Map
 Dungeon and Dragons map interface.
 
 ## Dependencies:
@@ -16,6 +16,6 @@ install git hooks `sh install.sh`
 
 
 ## Project setup
-pip install -r requirements.txt
+Run `pip install -r requirements.txt`
 <br>
-python python/helloworld.py
+Start project `python python/helloworld.py`
