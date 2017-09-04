@@ -4,6 +4,8 @@
 # Run install.sh to set it up.
 
 #run python validator
+echo "Running validation"
 cd ./python/
 find ./ -name '*.py' | xargs pep8
 cd ./../
+echo "Validation complete"
