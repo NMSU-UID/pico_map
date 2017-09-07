@@ -9,7 +9,7 @@ Opencv
 pep8
 
 ## Development setup
-clone repo `https://github.com/cyrillegin/pico_map.git`
+clone repo `https://github.com/NMSU_UID/pico_map.git`
 <br>
 install git hooks `sh install.sh`
 
