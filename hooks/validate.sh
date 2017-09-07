@@ -7,5 +7,5 @@
 echo "Running validation"
 cd ./python/
 find ./ -name '*.py' | xargs pep8
-cd ./../
-echo "Validation complete"
+#cd ./../
+#echo "Validation complete"
