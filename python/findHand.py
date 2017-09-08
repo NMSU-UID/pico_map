@@ -12,8 +12,7 @@ gray = cv2.GaussianBlur(gray, (19, 19), 0)
 
 # Apply a threshold to the image
 ret, grayThresh = cv2.threshold(gray, 0, 255,
-                                cv2.THRESH_BINARY_INV
-                                +cv2.THRESH_OTSU)
+                                cv2.THRESH_BINARY_INV + cv2.THRESH_OTSU)
 
 # Find all contours
 contours, heirarchy = cv2.findContours(grayThresh,
