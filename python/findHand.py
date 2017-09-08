@@ -16,8 +16,7 @@ ret, grayThresh = cv2.threshold(gray, 0, 255,
 
 # Find all contours
 contours, heirarchy = cv2.findContours(grayThresh,
-                                       cv2.RETR_TREE,
-                                       cv2.CHAIN_APPROX_SIMPLE)
+                                       cv2.RETR_TREE, cv2.CHAIN_APPROX_SIMPLE)
 
 # Draw the contours
 cv2.drawContours(img, contours, -1, (0, 255, 0), 3)
