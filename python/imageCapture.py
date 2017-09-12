@@ -57,6 +57,15 @@ def CaptureImage(cam):
         raise Exception(e)
 
 
+def GetImageRaw(cam):
+    print "Getting image."
+    try:
+        return cam.get_raw()
+    except Exception, e:
+        print "Error getting image string."
+        raise Exception(e)
+
+
 if __name__ == "__main__":
     print "Setting up."
     try:
