@@ -1,15 +1,38 @@
 import pygame
 import pygame.camera
 import logging
+from os import walk
+import time
+
+# For use on rasberry pi
+USBPREFIX = 'ttyUSB'
+
+# Foruse on OSX
+# USBPREFIX = 'tty.usb'
+
+
+def PollDev():
+    pollRate = 60
+    deviceFound = False
+    while(deviceFound):
+        f = []
+        for (dirpath, dirnames, filenames) in walk("/dev/"):
+            f.extend(filenames)
+        for i in f:
+            if i.startswith(USBPREFIX):
+                print "New device found, starting serial: {}".format(i)
+                return i
+        time.sleep(pollRate)
 
 
 def SetupCam():
-    logging.info('Starting image record.')
+    print 'Setting up camera.'
     pygame.init()
     pygame.camera.init()
+    camera = PollDev()
 
     try:
-        cam = pygame.camera.Camera("/dev/video0", (640, 480))
+        cam = pygame.camera.Camera("/dev/{}".format(camera), (640, 480))
         cam.start()
         return cam
     except Exception, e:
