@@ -1,3 +1,42 @@
+'''
+Pico Map
+Cyrille Gindreau
+2017
+
+Module for interfacing with a serial camera using pygame
+
+Methods:
+PollDev()
+    scans /dev for any new devices. Scan rate is set at 1 minute
+    once found, will return the name of the file.
+    NOTE: the way devices are named is greatly dependent on operating
+    system, I've tested on OSX and raspberry pis but this should be
+    updated for other systems as we find them.
+
+SetupCam()
+    params: the device name from the dev
+    creates a pygame camera object, raises exception if
+    device is not a camera.
+
+CaptureImage()
+    params: a pygame camera.
+    User the pygame camera to take a picute and save it.
+
+GetImageRaw()
+    params a pygame camera
+    Same as Capture Image except it returns a raw string.
+
+Main()
+    Runs through all the methods except GetImageRaw
+    This should be used only as a test to make sure the camera
+    is operating correctly. Also serves to take test pictures.
+
+TODO:
+    Altough Pygame is simple and accessible, it is based off
+    the opencv library. We should at some point convert this to
+    OpenCV.
+
+'''
 import pygame
 import pygame.camera
 import logging
@@ -25,11 +64,10 @@ def PollDev():
         time.sleep(pollRate)
 
 
-def SetupCam():
+def SetupCam(camera):
     print 'Setting up camera.'
     pygame.init()
     pygame.camera.init()
-    camera = PollDev()
 
     try:
         cam = pygame.camera.Camera("/dev/{}".format(camera), (640, 480))
@@ -67,9 +105,11 @@ def GetImageRaw(cam):
 
 
 if __name__ == "__main__":
+    print "finding devices."
+    camera = PollDev()
     print "Setting up."
     try:
-        cam = SetupCam()
+        cam = SetupCam(camera)
     except Exception, e:
         print "Error setting up the camera."
         exit()
