@@ -5,40 +5,46 @@ using UnityEngine.UI;
 
 public class ImageCapture : MonoBehaviour {
 
-	private WebCamTexture webCamTexture;
+    private WebCamTexture webCamTexture;
     public RawImage imgCam;
+    public bool ShowImage = true;
 
-	public void Start() {
-		InitCam();
-		Show(true);
+    public void Start() {
+        InitCam();
+        Show(ShowImage);
+    }
+
+	public WebCamTexture GetTexture () {
+		return webCamTexture;
 	}
 
     public void Show(bool bShow) {
         gameObject.SetActive(bShow);
 
-        if(webCamTexture==null)
+        if(webCamTexture == null) {
             InitCam();
+        }
 
-        if(bShow)
+        if(bShow) {
             webCamTexture.Play();
-        else
+        } else {
             webCamTexture.Stop();
+        }
     }
 
     void InitCam() {
-        webCamTexture=new WebCamTexture(640,480);
+        webCamTexture = new WebCamTexture(640,480);
 
         Debug.Log("Camera devices:");
 
-        WebCamDevice[] devices=WebCamTexture.devices;
+        WebCamDevice[] devices = WebCamTexture.devices;
 
         int i = 0;
-        while (i < devices.Length)
-        {
+        while (i < devices.Length) {
             Debug.Log(devices[i].name);
             i++;
         }
 
-        imgCam.texture=webCamTexture;
-}
+        imgCam.texture = webCamTexture;
+    }
 }
