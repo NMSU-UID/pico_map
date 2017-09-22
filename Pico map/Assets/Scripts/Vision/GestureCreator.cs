@@ -6,12 +6,12 @@ public class GestureCreator : MonoBehaviour {
 
 	public ImageCapture imageCapture;
 	public GameObject myIcon;
-	public Color targetColor;
+	public Color32 targetColor;
 	public float colorRange;
 	// in s
 	public float processRate;
 
-	private Color[] lastFrame;
+	private Color32[] lastFrame;
 	private float timer = 0;
 
 	void Update () {
@@ -25,14 +25,15 @@ public class GestureCreator : MonoBehaviour {
 
 	void ProcessImage() {
 		for(int i =0; i < lastFrame.Length; i++){
-			if (i > 100) {
+			if (i > 1000) {
 				break;
 			}
-		// 	if (inRange (lastFrame[i], targetColor)) {
-		// 		print("in range");
+			if (inRange (lastFrame[i], targetColor)) {
+				print("in range: " + i);
+				print(lastFrame[i] + "  " + targetColor);
 		// 		myIcon.transform.position = ClampCursor(myIcon.transform.position, GetPos (i));
-		// 		break;
-			// }
+				break;
+			}
 		}
 	}
 
@@ -46,20 +47,20 @@ public class GestureCreator : MonoBehaviour {
 		bool redTru = false;
 		bool blueTru = false;
 		bool greenTru = false;
-		if (input[0] > targetColor.r - colorRange && input[0] < targetColor.r + colorRange) {
+		if (Mathf.Abs(input[0] - targetColor[0]) < colorRange) {
+			// print(input[0] + " - " + targetColor[0] + " = " + (input[0] - targetColor[0]));
 			redTru = true;
 		}
-		if (input[2] > targetColor.b - colorRange && input[2]< targetColor.b + colorRange) {
+		if (Mathf.Abs(input[1] - targetColor[1]) < colorRange) {
 			blueTru = true;
 		}
-		if (input[1]> targetColor.g - colorRange && input[1] < targetColor.g + colorRange) {
+		if (Mathf.Abs(input[2] - targetColor[2]) < colorRange) {
 			greenTru = true;
 		}
 		if (redTru && blueTru && greenTru) {
 			print("returning true");
 			return true;
 		} else {
-			print("fetureing false");
 			return false;
 		}
 	}

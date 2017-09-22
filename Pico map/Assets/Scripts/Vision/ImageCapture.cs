@@ -33,13 +33,11 @@ public class ImageCapture : MonoBehaviour {
         Show(showImage);
     }
 
-    public Color[] GetColor () {
+    public Color32[] GetColor () {
         print("Height: " + webCamTexture.height + " Width: " + webCamTexture.width);
         webCamTexture.GetPixels32(data);
         // call pooling here.
-        print(data[16]);
-        Color[] result = new Color[webCamTexture.width*webCamTexture.height];
-        return result;
+        return data;
     }
 
     public void Show(bool bShow) {
