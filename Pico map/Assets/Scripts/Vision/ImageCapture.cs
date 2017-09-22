@@ -18,6 +18,10 @@ public class ImageCapture : MonoBehaviour {
         Show()
         Takes a boolean, sets the camera to show/hide.
 
+        GetColor()
+        returns an Color32 array of processed pixels.
+
+
      */
     private WebCamTexture webCamTexture;
     public RawImage imgCam;
@@ -65,7 +69,13 @@ public class ImageCapture : MonoBehaviour {
         return pass;
     }
 
-    public Color32[] PoolColors (Color32[] startData, int width, int height) {
+    // This function is ment to ease in the tracking of objects. It's essentially
+    // a maxPool function of size 3x3. It skips every three pixels horizontally
+    // and vertically then averages the surronding pixels. Given an image
+    // of ratio 1280 x 720, it will transform to 426 x 240.
+    // TODO: This currently only works for 1280 x 720 images, we should make This
+    // dynamic for different cameras or multiple passes.
+    Color32[] PoolColors (Color32[] startData, int width, int height) {
         Color32[] resultColor = new Color32[(width / 3) * (height / 3)];
         int counter = 0;
         for(int i = 1; i < width - 1; i += 3) {
@@ -78,8 +88,8 @@ public class ImageCapture : MonoBehaviour {
                 counter++;
             }
         }
-        print("done pooling, first result: " + resultColor[0] + " from " + startData[width + 2]);
-        print("Array size start: " + (width * height) + " to " + counter);
+        // print("done pooling, first result: " + resultColor[0] + " from " + startData[width + 2]);
+        // print("Array size start: " + (width * height) + " to " + counter);
         return resultColor;
     }
 
