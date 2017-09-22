@@ -35,9 +35,27 @@ public class ImageCapture : MonoBehaviour {
 
     public Color32[] GetColor () {
         print("Height: " + webCamTexture.height + " Width: " + webCamTexture.width);
-        webCamTexture.GetPixels32(data);
-        // call pooling here.
-        return data;
+        Color32[] raw = webCamTexture.GetPixels32(data);
+        Color32[] pass = PoolColors(raw, 1280, 720);
+        return pass;
+    }
+
+    public Color32[] PoolColors (Color32[] startData, int width, int height) {
+        Color32[] resultColor = new Color32[(width/3) * (height/3)];
+        int counter = 0;
+        for(int i = 1; i < width-1; i += 3) {
+            for(int j= 1; j < height-1; j += 3) {
+                float newRed = (startData[i*j].r + startData[i*j + 1].r + startData[i*j - 1].r + startData[(i-1)*j].r + startData[(i + 1)*j].r) / 5;
+                float newGreen = (startData[i*j].g + startData[i*j + 1].g + startData[i*j - 1].g + startData[(i-1)*j].g + startData[(i + 1)*j].g) / 5;
+                float newBlue = (startData[i*j].b + startData[i*j + 1].b + startData[i*j - 1].b + startData[(i-1)*j].b + startData[(i + 1)*j].b) / 5;
+
+                resultColor[counter] = new Color32((byte) newRed, (byte) newGreen, (byte) newBlue, 1);
+                counter ++;
+            }
+        }
+        print("done pooling, first result: " + resultColor[0] + " from " + startData[width + 2]);
+        print("Array size start: " + (width * height) + " to " + counter);
+        return resultColor;
     }
 
     public void Show(bool bShow) {
