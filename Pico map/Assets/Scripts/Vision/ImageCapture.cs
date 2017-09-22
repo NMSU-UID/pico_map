@@ -26,13 +26,20 @@ public class ImageCapture : MonoBehaviour {
     public RawImage imgCam;
     public bool showImage = true;
 
+    private Color32[] data;
+
     public void Start() {
         InitCam();
         Show(showImage);
     }
 
-    public WebCamTexture GetTexture () {
-        return webCamTexture;
+    public Color[] GetColor () {
+        print("Height: " + webCamTexture.height + " Width: " + webCamTexture.width);
+        webCamTexture.GetPixels32(data);
+        // call pooling here.
+        print(data[16]);
+        Color[] result = new Color[webCamTexture.width*webCamTexture.height];
+        return result;
     }
 
     public void Show(bool bShow) {
@@ -49,18 +56,16 @@ public class ImageCapture : MonoBehaviour {
         }
     }
 
+    // This should become a cooroutine and handle map placement/scaling.
     void InitCam() {
-        webCamTexture = new WebCamTexture(640,480);
-
-        Debug.Log("Camera devices:");
-
-        WebCamDevice[] devices = WebCamTexture.devices;
-
-        int i = 0;
-        while (i < devices.Length) {
-            Debug.Log(devices[i].name);
-            i++;
-        }
+        webCamTexture = new WebCamTexture();
+        webCamTexture.requestedFPS = 1;
+        webCamTexture.requestedWidth = 640;
+        webCamTexture.requestedHeight = 360;
+        webCamTexture.Play();
+        // this should be set using webCamTexture.width/height but it needs to wait
+        // until initialization is done.
+        data = new Color32[1280 * 720];
 
         imgCam.texture = webCamTexture;
     }

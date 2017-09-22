@@ -170,6 +170,51 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &297386885
+GameObject:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  serializedVersion: 5
+  m_Component:
+  - component: {fileID: 297386886}
+  - component: {fileID: 297386887}
+  m_Layer: 0
+  m_Name: GestureCreator
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &297386886
+Transform:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 297386885}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 1007641454}
+  m_RootOrder: 0
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &297386887
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 297386885}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 63687a5a9dbb04800a0a780f69ba1001, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  imageCapture: {fileID: 338629457}
+  myIcon: {fileID: 1382244158}
+  targetColor: {r: 1, g: 0.537, b: 0, a: 0}
+  colorRange: 0.5
+  processRate: 5
 --- !u!1 &338629456
 GameObject:
   m_ObjectHideFlags: 0
@@ -210,7 +255,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 1007641454}
-  m_RootOrder: 0
+  m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &469642168
 GameObject:
@@ -326,7 +371,7 @@ Transform:
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
-  - {fileID: 983779018}
+  - {fileID: 1382244161}
   m_Father: {fileID: 0}
   m_RootOrder: 4
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -409,48 +454,6 @@ Transform:
   m_Father: {fileID: 1836849061}
   m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 61.329002, y: -117.531006, z: -66.137}
---- !u!1 &983779017
-GameObject:
-  m_ObjectHideFlags: 0
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 0}
-  serializedVersion: 5
-  m_Component:
-  - component: {fileID: 983779018}
-  - component: {fileID: 983779019}
-  m_Layer: 0
-  m_Name: CubeParent
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!4 &983779018
-Transform:
-  m_ObjectHideFlags: 0
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 0}
-  m_GameObject: {fileID: 983779017}
-  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 24.05017, y: -511.28687, z: -1.6193848}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_Children:
-  - {fileID: 1382244161}
-  m_Father: {fileID: 778435238}
-  m_RootOrder: 0
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &983779019
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 0}
-  m_GameObject: {fileID: 983779017}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 43f8c4a3546e84fddb98be0aec069e81, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  child: {fileID: 1382244161}
 --- !u!1 &1007641453
 GameObject:
   m_ObjectHideFlags: 0
@@ -476,6 +479,7 @@ Transform:
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
+  - {fileID: 297386886}
   - {fileID: 338629458}
   m_Father: {fileID: 0}
   m_RootOrder: 3
@@ -610,10 +614,10 @@ Transform:
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 1382244158}
   m_LocalRotation: {x: 0.36003006, y: -0.12971109, z: 0.3131503, w: 0.8691895}
-  m_LocalPosition: {x: -627.0502, y: 77.286865, z: 1.6193848}
+  m_LocalPosition: {x: -603, y: -434, z: 0}
   m_LocalScale: {x: 200, y: 200, z: 200.00003}
   m_Children: []
-  m_Father: {fileID: 983779018}
+  m_Father: {fileID: 778435238}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 45, y: 0, z: 39.626003}
 --- !u!1 &1833427736
