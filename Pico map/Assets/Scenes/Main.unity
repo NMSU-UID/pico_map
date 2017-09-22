@@ -212,9 +212,11 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   imageCapture: {fileID: 338629457}
   myIcon: {fileID: 1382244158}
-  targetColor: {r: 1, g: 0.537, b: 0, a: 0}
-  colorRange: 0.5
-  processRate: 5
+  targetColor:
+    serializedVersion: 2
+    rgba: 35071
+  colorRange: 0.2
+  processRate: 3
 --- !u!1 &338629456
 GameObject:
   m_ObjectHideFlags: 0

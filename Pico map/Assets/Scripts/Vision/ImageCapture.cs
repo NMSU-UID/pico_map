@@ -58,8 +58,8 @@ public class ImageCapture : MonoBehaviour {
     void InitCam() {
         webCamTexture = new WebCamTexture();
         webCamTexture.requestedFPS = 1;
-        webCamTexture.requestedWidth = 640;
-        webCamTexture.requestedHeight = 360;
+        webCamTexture.requestedWidth = 1280;
+        webCamTexture.requestedHeight = 720;
         webCamTexture.Play();
         // this should be set using webCamTexture.width/height but it needs to wait
         // until initialization is done.

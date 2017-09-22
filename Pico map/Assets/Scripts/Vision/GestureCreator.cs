@@ -31,16 +31,11 @@ public class GestureCreator : MonoBehaviour {
 			if (inRange (lastFrame[i], targetColor)) {
 				print("in range: " + i);
 				print(lastFrame[i] + "  " + targetColor);
-		// 		myIcon.transform.position = ClampCursor(myIcon.transform.position, GetPos (i));
+				myIcon.transform.position = ClampCursor(myIcon.transform.position, GetPos (i));
 				break;
 			}
 		}
 	}
-
-
-
-
-
 
 
 	bool inRange(Color input, Color targetColor){
@@ -48,7 +43,6 @@ public class GestureCreator : MonoBehaviour {
 		bool blueTru = false;
 		bool greenTru = false;
 		if (Mathf.Abs(input[0] - targetColor[0]) < colorRange) {
-			// print(input[0] + " - " + targetColor[0] + " = " + (input[0] - targetColor[0]));
 			redTru = true;
 		}
 		if (Mathf.Abs(input[1] - targetColor[1]) < colorRange) {
@@ -58,7 +52,6 @@ public class GestureCreator : MonoBehaviour {
 			greenTru = true;
 		}
 		if (redTru && blueTru && greenTru) {
-			print("returning true");
 			return true;
 		} else {
 			return false;
@@ -70,10 +63,8 @@ public class GestureCreator : MonoBehaviour {
 	}
 
 	Vector3 GetPos(int i){
-		print ("i = " + i + " camHeight = " + 480 + " camWidth = " + 640+ " i % camHeight = " + i % 480 + " Mathf.Floor i / camWidth = " + Mathf.Floor( i / 640));
-
-		float x = (i % 640);
-		float y = Mathf.Floor (i / 480);
+		float x = (i % 1280);
+		float y = Mathf.Floor (i / 640);
 		Vector3 final = new Vector3 (x, y, 0);
 		return final;
 	}
