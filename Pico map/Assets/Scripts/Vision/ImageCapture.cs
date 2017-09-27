@@ -51,6 +51,7 @@ public class ImageCapture : MonoBehaviour {
         imgCam.texture = webCamTexture;
     }
 
+    // Shows / hides the texture. Useful for debugging.
     public void Show(bool bShow) {
         gameObject.SetActive(bShow);
 
@@ -67,10 +68,12 @@ public class ImageCapture : MonoBehaviour {
 
     public Color32[] GetColor () {
         Color32[] raw = webCamTexture.GetPixels32(data);
+        //TODO: PoolColors not currently working. we should be returning pass
         Color32[] pass = PoolColors(raw, cameraWidth, cameraHeight);
         return raw;
     }
 
+    // BUG: This doesn't currently work and is hurting our frame rate :(
     // This function is ment to ease in the tracking of objects. It's essentially
     // a maxPool function of size 3x3. It skips every three pixels horizontally
     // and vertically then averages the surronding pixels. Given an image
@@ -90,10 +93,6 @@ public class ImageCapture : MonoBehaviour {
                 counter++;
             }
         }
-        // print("done pooling, first result: " + resultColor[0] + " from " + startData[width + 2]);
-        // print("Array size start: " + (width * height) + " to " + counter);
         return resultColor;
     }
-
-
 }
