@@ -22,9 +22,18 @@ public class GestureCreator : MonoBehaviour {
     public float colorRange;
     // in s
     public float processRate = 3;
+    int cameraWidth;
+    int cameraHeight;
+    public int sceneWidth;
+    public int sceneHeight;
 
     private Color32[] lastFrame;
     private float timer = 0;
+
+    void Start(){
+        cameraWidth = imageCapture.cameraWidth;
+        cameraHeight = imageCapture.cameraHeight;
+    }
 
 	// timer acts as our image capture rate. I currently set this to something
 	// like 3 seconds because of the high overhead of processing but as we get quicker
@@ -43,9 +52,10 @@ public class GestureCreator : MonoBehaviour {
     void ProcessImage() {
         for(int i = 0; i < lastFrame.Length; i++) {
             if (inRange (lastFrame[i], targetColor)) {
-                print("in range: " + i);
-                print(lastFrame[i] + "  " + targetColor);
-                myIcon.transform.position = ClampCursor(myIcon.transform.position, GetPos (i));
+                // print("in range: " + i);
+                // print(lastFrame[i] + "  " + targetColor);
+                // Vector3 newPos = ClampCursor(myIcon.transform.position, GetPos (i));
+                myIcon.transform.position = GetPos(i);
                 break;
             }
         }
@@ -72,17 +82,15 @@ public class GestureCreator : MonoBehaviour {
         }
     }
 
-	// How far to move the thing. This will later be replaced by physics.
-    Vector3 ClampCursor(Vector3 start, Vector3 newP){
-        return new Vector3(Mathf.Clamp(newP.x, start.x - 2, start.x + 2), Mathf.Clamp(newP.y, start.y - 2, start.y + 2), 0);
-    }
-
 	// Find the position of where the particular color was found and translate it
 	// to Unity space.
     Vector3 GetPos(int i){
-        float x = (i % 1280);
-        float y = Mathf.Floor (i / 640);
-        Vector3 final = new Vector3 (x, y, 0);
+        float x = (i % cameraWidth);
+        float y = Mathf.Floor (i / cameraHeight);
+        x = x * sceneWidth / cameraWidth;
+        y = y *  sceneHeight / cameraHeight;
+        Vector3 final = new Vector3 (x, y, 400);
+        print(x + " " + y);
         return final;
     }
 }

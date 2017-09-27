@@ -27,6 +27,9 @@ public class ImageCapture : MonoBehaviour {
     public RawImage imgCam;
     public bool showImage = true;
 
+    public int cameraWidth = 1280;
+    public int cameraHeight = 720;
+
     private Color32[] data;
 
     public void Start() {
@@ -38,12 +41,12 @@ public class ImageCapture : MonoBehaviour {
     void InitCam() {
         webCamTexture = new WebCamTexture();
         webCamTexture.requestedFPS = 1;
-        webCamTexture.requestedWidth = 1280;
-        webCamTexture.requestedHeight = 720;
+        webCamTexture.requestedWidth = cameraWidth;
+        webCamTexture.requestedHeight = cameraWidth;
         webCamTexture.Play();
         // this should be set using webCamTexture.width/height but it needs to wait
         // until initialization is done.
-        data = new Color32[1280 * 720];
+        data = new Color32[cameraWidth * cameraHeight];
 
         imgCam.texture = webCamTexture;
     }
@@ -63,10 +66,9 @@ public class ImageCapture : MonoBehaviour {
     }
 
     public Color32[] GetColor () {
-        print("Height: " + webCamTexture.height + " Width: " + webCamTexture.width);
         Color32[] raw = webCamTexture.GetPixels32(data);
-        Color32[] pass = PoolColors(raw, 1280, 720);
-        return pass;
+        Color32[] pass = PoolColors(raw, cameraWidth, cameraHeight);
+        return raw;
     }
 
     // This function is ment to ease in the tracking of objects. It's essentially
