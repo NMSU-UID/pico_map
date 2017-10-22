@@ -24,7 +24,7 @@ public class ImageCapture : MonoBehaviour {
 
      */
     private WebCamTexture webCamTexture;
-    public RawImage imgCam;
+    public GameObject imgCam;
     public bool showImage = true;
 
     public int cameraWidth;
@@ -50,7 +50,7 @@ public class ImageCapture : MonoBehaviour {
         // until initialization is done.
         // data = new Color32[cameraWidth * cameraHeight];
 
-        imgCam.texture = webCamTexture;
+        imgCam.GetComponent<Renderer>().material.mainTexture = webCamTexture;
     }
 
     // Shows / hides the texture. Useful for debugging.
