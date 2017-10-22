@@ -54,19 +54,16 @@ public class ImageCapture : MonoBehaviour {
     }
     Color32[] cols;
     public Color trackingColor;
+    public List<Transform> corners;
     IEnumerator ZoomCameraTexture(){
         // find edges
         cols = GetColor();
         while (cols.Length < 1) {
-
-            print("start");
-            yield return new WaitForSeconds(2);
+            yield return new WaitForSeconds(3);
             cols = GetColor();
 
         }
-        print("done");
 
-        print("go");
         int minX = 1000;
         int maxX = 0;
         int minY = 1000;
@@ -90,11 +87,31 @@ public class ImageCapture : MonoBehaviour {
                 }
             }
         }
+        print(" " + minX + " " + maxX + " " + minY + " " + maxY);
+        // Scale to projector
+        minX = (1920 / cameraWidth) * minX;
+        maxX = (1920 / cameraWidth) * maxX;
+        minY = (1020 / cameraHeight) * minY;
+        maxY = (1020 / cameraHeight) * maxY;
+
+        // Offset to center
+        minX = minX - (1920/2);
+        maxX = maxX - (1920/2);
+        minY = minY - (1080/2);
+        maxY = maxY - (1080/2);
+
         print("done with " + iterations + " iters");
         print("found " + rangeCount + " in range");
-        print(" " + minX + " " + maxX + " " + minY + " " + maxY);
+
+        print (webCamTexture.width);
+        print(webCamTexture.height);
         // calculate middle
+        Vector2 middle = new Vector2(maxX - minX, maxY - minY);
         // center image
+        corners[0].position = new Vector3(minX, -600, maxY); //upper left
+        corners[1].position = new Vector3(maxX, -600, maxY); //upper right
+        corners[2].position = new Vector3(minX, -600, minY); //lower left
+        corners[3].position = new Vector3(maxX, -600, minY); //lower right
         //scale plane
     }
 
