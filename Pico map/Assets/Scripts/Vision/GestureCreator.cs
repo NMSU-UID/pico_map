@@ -54,6 +54,7 @@ public class GestureCreator : MonoBehaviour {
     // like 3 seconds because of the high overhead of processing but as we get quicker
     // we'll be able to lower it substantially.
     void Update () {
+        return;
         timer += Time.deltaTime;
         if (timer > processRate) {
             lastFrame = imageCapture.GetColor();
@@ -66,34 +67,34 @@ public class GestureCreator : MonoBehaviour {
     // within out accepted range of target color.
     void ProcessImage() {
         for(int i = 0; i < lastFrame.Length; i++) {
-            if (inRange (lastFrame[i], targetColor)) {
-
-                myIcon.transform.position = GetMidpoint(myIcon.transform.position, GetPos(i));
-                break;
-            }
+            // if (inRange (lastFrame[i], targetColor)) {
+            //
+            //     myIcon.transform.position = GetMidpoint(myIcon.transform.position, GetPos(i));
+            //     break;
+            // }
         }
     }
 
     // Checks if the current pixel is with colorRange of the target color.
-    bool inRange(Color input, Color targetColor){
-        bool redTru = false;
-        bool blueTru = false;
-        bool greenTru = false;
-        if (Mathf.Abs(input[0] - targetColor[0]) < colorRange) {
-            redTru = true;
-        }
-        if (Mathf.Abs(input[1] - targetColor[1]) < colorRange) {
-            blueTru = true;
-        }
-        if (Mathf.Abs(input[2] - targetColor[2]) < colorRange) {
-            greenTru = true;
-        }
-        if (redTru && blueTru && greenTru) {
-            return true;
-        } else {
-            return false;
-        }
-    }
+    // bool inRange(Color input, Color targetColor){
+    //     bool redTru = false;
+    //     bool blueTru = false;
+    //     bool greenTru = false;
+    //     if (Mathf.Abs(input[0] - targetColor[0]) < colorRange) {
+    //         redTru = true;
+    //     }
+    //     if (Mathf.Abs(input[1] - targetColor[1]) < colorRange) {
+    //         blueTru = true;
+    //     }
+    //     if (Mathf.Abs(input[2] - targetColor[2]) < colorRange) {
+    //         greenTru = true;
+    //     }
+    //     if (redTru && blueTru && greenTru) {
+    //         return true;
+    //     } else {
+    //         return false;
+    //     }
+    // }
 
     // Find the position of where the particular color was found and translate it
     // to Unity space.

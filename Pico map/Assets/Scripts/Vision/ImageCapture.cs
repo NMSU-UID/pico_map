@@ -24,8 +24,7 @@ public class ImageCapture : MonoBehaviour {
 
      */
     private WebCamTexture webCamTexture;
-    public GameObject imgCam;
-    public bool showImage = true;
+    public GameObject webCamObject;
 
     public int cameraWidth;
     public int cameraHeight;
@@ -34,7 +33,7 @@ public class ImageCapture : MonoBehaviour {
 
     public void Start() {
         InitCam();
-        Show(showImage);
+        Show(true);
     }
 
     // This should become a cooroutine and handle map placement/scaling.
@@ -50,7 +49,53 @@ public class ImageCapture : MonoBehaviour {
         // until initialization is done.
         // data = new Color32[cameraWidth * cameraHeight];
 
-        imgCam.GetComponent<Renderer>().material.mainTexture = webCamTexture;
+        webCamObject.GetComponent<Renderer>().material.mainTexture = webCamTexture;
+        StartCoroutine("ZoomCameraTexture");
+    }
+    Color32[] cols;
+    public Color trackingColor;
+    IEnumerator ZoomCameraTexture(){
+        // find edges
+        cols = GetColor();
+        while (cols.Length < 1) {
+
+            print("start");
+            yield return new WaitForSeconds(2);
+            cols = GetColor();
+
+        }
+        print("done");
+
+        print("go");
+        int minX = 1000;
+        int maxX = 0;
+        int minY = 1000;
+        int maxY = 0;
+        print(cols.Length);
+        int iterations = 0;
+        int rangeCount = 0;
+        for(int i = 0; i < cameraWidth; i+=10){
+            for(int j = 0; j < cameraHeight; j+=10) {
+
+                iterations += 1;
+                // print("i: " + i + " j: " + j);
+                // print(cols[i*(j+1) + j]);
+                if (inRange(cols[i*(j+1) + j], trackingColor)) {
+                    // print("In range: " + i + " " + j);
+                    rangeCount += 1;
+                    if (minX > i) minX = i;
+                    if (maxX < i) maxX = i;
+                    if (minY > j) minY = j;
+                    if (maxY < j) maxY = j;
+                }
+            }
+        }
+        print("done with " + iterations + " iters");
+        print("found " + rangeCount + " in range");
+        print(" " + minX + " " + maxX + " " + minY + " " + maxY);
+        // calculate middle
+        // center image
+        //scale plane
     }
 
     // Shows / hides the texture. Useful for debugging.
@@ -61,11 +106,7 @@ public class ImageCapture : MonoBehaviour {
             InitCam();
         }
 
-        if(bShow) {
-            webCamTexture.Play();
-        } else {
-            webCamTexture.Stop();
-        }
+        webCamTexture.Play();
     }
 
     public Color32[] GetColor () {
@@ -102,5 +143,23 @@ public class ImageCapture : MonoBehaviour {
     //     }
     //     return resultColor;
     // }
+
+    bool inRange(Color input, Color targetColor){
+
+        if (Mathf.Abs(input[0] - targetColor[0]) > 0.2) {
+            // print("fail red");
+            return false;
+        }
+        if (Mathf.Abs(input[1] - targetColor[1]) > 0.2) {
+            // print("fail green");
+            return false;
+        }
+        if (Mathf.Abs(input[2] - targetColor[2]) > 0.2) {
+            // print("fail blue");
+            return false;
+        }
+        // print("Gotem");
+        return true;
+    }
 
 }
