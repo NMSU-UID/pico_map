@@ -30,6 +30,7 @@ public class ImageCapture : MonoBehaviour {
     public int cameraHeight;
 
     private Color32[] data;
+    public bool setupComplete = false;
 
     public void Start() {
         InitCam();
@@ -55,6 +56,7 @@ public class ImageCapture : MonoBehaviour {
     Color32[] cols;
     public Color trackingColor;
     public List<Transform> corners;
+    public GameObject TrackingPlane;
     IEnumerator ZoomCameraTexture(){
         // find edges
         cols = GetColor();
@@ -87,7 +89,7 @@ public class ImageCapture : MonoBehaviour {
                 }
             }
         }
-        print(" " + minX + " " + maxX + " " + minY + " " + maxY);
+        // print(" " + minX + " " + maxX + " " + minY + " " + maxY);
 
         // Scale to projector
         minX = (1920 / cameraWidth) * minX;
@@ -101,8 +103,8 @@ public class ImageCapture : MonoBehaviour {
         minY = minY - (1080/2);
         maxY = maxY - (1080/2);
 
-        print("done with " + iterations + " iters");
-        print("found " + rangeCount + " in range");
+        // print("done with " + iterations + " iters");
+        // print("found " + rangeCount + " in range");
 
         // calculate middle
         float x = - (1920 / 2) + (minX * 3);
@@ -118,6 +120,11 @@ public class ImageCapture : MonoBehaviour {
         float xScale = webCamObject.transform.localScale.x * (1920 / (maxX - minX));
         float zScale = webCamObject.transform.localScale.y * (1080 / (maxY - minY));
         webCamObject.transform.localScale = new Vector3(xScale, zScale, 1);
+
+
+        // webCamObject.SetActive(false);
+        TrackingPlane.SetActive(false);
+        setupComplete = true;
     }
 
     // Shows / hides the texture. Useful for debugging.
