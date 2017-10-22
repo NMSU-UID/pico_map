@@ -64,10 +64,10 @@ public class ImageCapture : MonoBehaviour {
 
         }
 
-        int minX = 1000;
-        int maxX = 0;
-        int minY = 1000;
-        int maxY = 0;
+        float minX = 1000;
+        float maxX = 0;
+        float minY = 1000;
+        float maxY = 0;
         print(cols.Length);
         int iterations = 0;
         int rangeCount = 0;
@@ -88,6 +88,7 @@ public class ImageCapture : MonoBehaviour {
             }
         }
         print(" " + minX + " " + maxX + " " + minY + " " + maxY);
+
         // Scale to projector
         minX = (1920 / cameraWidth) * minX;
         maxX = (1920 / cameraWidth) * maxX;
@@ -103,16 +104,20 @@ public class ImageCapture : MonoBehaviour {
         print("done with " + iterations + " iters");
         print("found " + rangeCount + " in range");
 
-        print (webCamTexture.width);
-        print(webCamTexture.height);
         // calculate middle
-        Vector2 middle = new Vector2(maxX - minX, maxY - minY);
+        float x = - (1920 / 2) + (minX * 3);
+        float z = (1080 / 2) - (minY * 3);
+        // webCamObject.transform.position = new Vector3(x, -700, z);
         // center image
         corners[0].position = new Vector3(minX, -600, maxY); //upper left
         corners[1].position = new Vector3(maxX, -600, maxY); //upper right
         corners[2].position = new Vector3(minX, -600, minY); //lower left
         corners[3].position = new Vector3(maxX, -600, minY); //lower right
+
         //scale plane
+        float xScale = webCamObject.transform.localScale.x * (1920 / (maxX - minX));
+        float zScale = webCamObject.transform.localScale.y * (1080 / (maxY - minY));
+        webCamObject.transform.localScale = new Vector3(xScale, zScale, 1);
     }
 
     // Shows / hides the texture. Useful for debugging.
