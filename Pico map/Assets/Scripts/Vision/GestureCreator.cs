@@ -37,8 +37,8 @@ public class GestureCreator : MonoBehaviour {
     public float colorRange;
     // in s
     public float processRate = 3;
-    int cameraWidth;
-    int cameraHeight;
+    // int cameraWidth;
+    // int cameraHeight;
     public int sceneWidth;
     public int sceneHeight;
 
@@ -46,8 +46,8 @@ public class GestureCreator : MonoBehaviour {
     private float timer = 0;
 
     void Start(){
-        cameraWidth = imageCapture.cameraWidth;
-        cameraHeight = imageCapture.cameraHeight;
+        // cameraWidth = imageCapture.cameraWidth;
+        // cameraHeight = imageCapture.cameraHeight;
     }
 
     // timer acts as our image capture rate. I currently set this to something
@@ -67,7 +67,8 @@ public class GestureCreator : MonoBehaviour {
     void ProcessImage() {
         for(int i = 0; i < lastFrame.Length; i++) {
             if (inRange (lastFrame[i], targetColor)) {
-                myIcon.transform.position = GetPos(i);
+
+                myIcon.transform.position = GetMidpoint(myIcon.transform.position, GetPos(i));
                 break;
             }
         }
@@ -97,12 +98,16 @@ public class GestureCreator : MonoBehaviour {
     // Find the position of where the particular color was found and translate it
     // to Unity space.
     Vector3 GetPos(int i){
-        float x = (i % cameraWidth);
-        float y = Mathf.Floor (i / cameraHeight);
-        x = x * sceneWidth / cameraWidth;
-        y = y *  sceneHeight / cameraHeight;
+        float x = (i % imageCapture.cameraWidth);
+        float y = Mathf.Floor (i / imageCapture.cameraHeight);
+        x = x * sceneWidth / imageCapture.cameraWidth;
+        y = y *  sceneHeight / imageCapture.cameraHeight;
         Vector3 final = new Vector3 (x, y, 400);
         print(x + " " + y);
         return final;
+    }
+
+    Vector3 GetMidpoint(Vector3 start, Vector3 end) {
+        return new Vector3((start.x + end.x) / 2, (start.y + end.y) / 2, 400);
     }
 }
