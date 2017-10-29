@@ -50,15 +50,19 @@ public class GestureCreator : MonoBehaviour {
         // cameraHeight = imageCapture.cameraHeight;
     }
 
-    // timer acts as our image capture rate. I currently set this to something
+    // Timer acts as our image capture rate. I currently set this to something
     // like 3 seconds because of the high overhead of processing but as we get quicker
     // we'll be able to lower it substantially.
     void Update () {
+
         timer += Time.deltaTime;
         if (timer > processRate) {
+            timer = 0;
+            if (imageCapture.setupComplete == false) {
+                return;
+            }
             lastFrame = imageCapture.GetColor();
             ProcessImage();
-            timer = 0;
         }
     }
 
@@ -100,14 +104,14 @@ public class GestureCreator : MonoBehaviour {
     Vector3 GetPos(int i){
         float x = (i % imageCapture.cameraWidth);
         float y = Mathf.Floor (i / imageCapture.cameraHeight);
-        x = x * sceneWidth / imageCapture.cameraWidth;
-        y = y *  sceneHeight / imageCapture.cameraHeight;
+        x = x * 4 - (1920 / 2);
+        y = y *  3 - (1080 / 2);
         Vector3 final = new Vector3 (x, y, 400);
         print(x + " " + y);
         return final;
     }
 
     Vector3 GetMidpoint(Vector3 start, Vector3 end) {
-        return new Vector3((start.x + end.x) / 2, (start.y + end.y) / 2, 400);
+        return new Vector3((start.x + end.x) / 2, -625, (start.y + end.y) / 2);
     }
 }
