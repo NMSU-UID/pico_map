@@ -425,7 +425,7 @@ MonoBehaviour:
   m_MinValue: 0
   m_MaxValue: 1
   m_WholeNumbers: 0
-  m_Value: 1
+  m_Value: 0.9
   m_OnValueChanged:
     m_PersistentCalls:
       m_Calls:
@@ -692,7 +692,7 @@ MonoBehaviour:
   m_MinValue: 0
   m_MaxValue: 1
   m_WholeNumbers: 0
-  m_Value: 0.063
+  m_Value: 0.287
   m_OnValueChanged:
     m_PersistentCalls:
       m_Calls:
@@ -1385,7 +1385,7 @@ Light:
   serializedVersion: 8
   m_Type: 1
   m_Color: {r: 1, g: 0.95686275, b: 0.8392157, a: 1}
-  m_Intensity: 1
+  m_Intensity: 0.9
   m_Range: 10
   m_SpotAngle: 30
   m_CookieSize: 10
@@ -1417,7 +1417,7 @@ Transform:
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 2138388857}
-  m_LocalRotation: {x: 0, y: -0.5730044, z: 0, w: 0.8195523}
+  m_LocalRotation: {x: 0, y: -0.29303926, z: 0, w: 0.9561004}
   m_LocalPosition: {x: -361, y: 3, z: -2048}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
@@ -1435,3 +1435,4 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4e082ac78f8d0464f8c4e03ad58d15d4, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  dirLight: {fileID: 2138388858}
