@@ -2,7 +2,7 @@
  * October 2017
  * LightControl.cs
  * Purpose: Prototype to control light.
- * TODO: link the three functions together, 
+ * TODO: link the three functions together,
  *       make them private and function off one input
  */
 
@@ -21,11 +21,11 @@ public class LightControl : MonoBehaviour {
 
     //changeAngle changes the angle of the light
     public void changeAngle(float val) {
-        dirLight.transform.rotation = Quaternion.Euler(0, (val/12) * 160 - 80, 0);
+        dirLight.transform.rotation = Quaternion.Euler((val/12) * 180 - 0, 90, 0);
     }//End changeAngle
-    
+
     //changeColor changes the color of the light
-    //(Ranging Yellow to Cyan) Although color uses 0-1, we're using 0-510 
+    //(Ranging Yellow to Cyan) Although color uses 0-1, we're using 0-510
     //which is really (0-255), (0-255) first set in Blue, second in Red
     public void changeColor(float val) {
         if(val <= 255)
