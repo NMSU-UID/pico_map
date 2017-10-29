@@ -75,12 +75,8 @@ public class ImageCapture : MonoBehaviour {
         int rangeCount = 0;
         for(int i = 0; i < cameraWidth; i+=10){
             for(int j = 0; j < cameraHeight; j+=10) {
-
                 iterations += 1;
-                // print("i: " + i + " j: " + j);
-                // print(cols[i*(j+1) + j]);
                 if (inRange(cols[i*(j+1) + j], trackingColor)) {
-                    // print("In range: " + i + " " + j);
                     rangeCount += 1;
                     if (minX > i) minX = i;
                     if (maxX < i) maxX = i;
@@ -89,7 +85,6 @@ public class ImageCapture : MonoBehaviour {
                 }
             }
         }
-        // print(" " + minX + " " + maxX + " " + minY + " " + maxY);
 
         // Scale to projector
         minX = (1920 / cameraWidth) * minX;
@@ -103,26 +98,21 @@ public class ImageCapture : MonoBehaviour {
         minY = minY - (1080/2);
         maxY = maxY - (1080/2);
 
-        // print("done with " + iterations + " iters");
-        // print("found " + rangeCount + " in range");
+        // Calculate middle
+        // float x = - (1920 / 2) + (minX * 3);
+        // float z = (1080 / 2) - (minY * 3);
 
-        // calculate middle
-        float x = - (1920 / 2) + (minX * 3);
-        float z = (1080 / 2) - (minY * 3);
-        // webCamObject.transform.position = new Vector3(x, -700, z);
-        // center image
+        // Center image
         corners[0].position = new Vector3(minX, -600, maxY); //upper left
         corners[1].position = new Vector3(maxX, -600, maxY); //upper right
         corners[2].position = new Vector3(minX, -600, minY); //lower left
         corners[3].position = new Vector3(maxX, -600, minY); //lower right
 
-        //scale plane
+        // Scale plane
         float xScale = webCamObject.transform.localScale.x * (1920 / (maxX - minX));
         float zScale = webCamObject.transform.localScale.y * (1080 / (maxY - minY));
         webCamObject.transform.localScale = new Vector3(xScale, zScale, 1);
 
-
-        // webCamObject.SetActive(false);
         TrackingPlane.SetActive(false);
         setupComplete = true;
     }
@@ -176,18 +166,14 @@ public class ImageCapture : MonoBehaviour {
     bool inRange(Color input, Color targetColor){
 
         if (Mathf.Abs(input[0] - targetColor[0]) > 0.2) {
-            // print("fail red");
             return false;
         }
         if (Mathf.Abs(input[1] - targetColor[1]) > 0.2) {
-            // print("fail green");
             return false;
         }
         if (Mathf.Abs(input[2] - targetColor[2]) > 0.2) {
-            // print("fail blue");
             return false;
         }
-        // print("Gotem");
         return true;
     }
 

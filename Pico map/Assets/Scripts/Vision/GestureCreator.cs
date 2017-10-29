@@ -50,7 +50,7 @@ public class GestureCreator : MonoBehaviour {
         // cameraHeight = imageCapture.cameraHeight;
     }
 
-    // timer acts as our image capture rate. I currently set this to something
+    // Timer acts as our image capture rate. I currently set this to something
     // like 3 seconds because of the high overhead of processing but as we get quicker
     // we'll be able to lower it substantially.
     void Update () {
