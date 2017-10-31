@@ -236,11 +236,11 @@ MonoBehaviour:
   myIcon: {fileID: 1382244158}
   targetColor:
     serializedVersion: 2
-    rgba: 43007
+    rgba: 29439
   colorRange: 0.3
   processRate: 0.1
-  sceneWidth: 1660
-  sceneHeight: 865
+  sceneWidth: 1920
+  sceneHeight: 1080
 --- !u!1 &300948536
 GameObject:
   m_ObjectHideFlags: 0
@@ -453,6 +453,7 @@ MonoBehaviour:
   webCamObject: {fileID: 1223094673}
   cameraWidth: 640
   cameraHeight: 480
+  reductionScale: 3
   setupComplete: 0
   trackingColor: {r: 1, g: 0.31034485, b: 0, a: 1}
   corners:
@@ -1146,7 +1147,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!23 &917935319
 MeshRenderer:
   m_ObjectHideFlags: 0
@@ -1357,7 +1358,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!23 &1223094674
 MeshRenderer:
   m_ObjectHideFlags: 0

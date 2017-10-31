@@ -28,6 +28,7 @@ public class ImageCapture : MonoBehaviour {
 
     public int cameraWidth;
     public int cameraHeight;
+    public int reductionScale;
 
     private Color32[] data;
     public bool setupComplete = false;
@@ -149,21 +150,23 @@ public class ImageCapture : MonoBehaviour {
     // dynamic for different cameras or multiple passes.  Also, if it continues to hurt
     // framerate, we can try threading it.
     Color32[] PoolColors (Color32[] startData, int width, int height) {
-        Color32[] resultColor = new Color32[(width / 3) * (height / 3)];
+        Color32[] resultColor = new Color32[(width / reductionScale) * (height / reductionScale)];
         int counter = 0;
-        for(int j = 0; j < height; j += 3) {
-            for(int i = 0; i < width - 2; i += 3) {
+        for(int j = 0; j < height; j += reductionScale) {
+            for(int i = 0; i < width - reductionScale - 1; i += reductionScale) {
                 float newRed = 0;
                 float newGreen = 0;
                 float newBlue = 0;
-                for(int k = 0; k < 3; k++) {
-                    newRed += startData[i + j*height + width * k].r + startData[i + j*height + width * k + 1].r + startData[i + j*height + width * k + 2].r; 
-                    newGreen += startData[i + j*height + width * k].g + startData[i + j*height + width * k + 1].g + startData[i + j*height + width * k + 2].g;
-                    newBlue += startData[i + j*height + width * k].b + startData[i + j*height + width * k + 1].b + startData[i + j*height + width * k + 2].b;
+                for(int k = 0; k < reductionScale; k++) {
+                    for(int m = 0; m < reductionScale; m++) {
+                        newRed += startData[i + j*height + width * k + m].r; 
+                        newGreen += startData[i + j*height + width * k + m].g;
+                        newBlue += startData[i + j*height + width * k + m].b;
+                    }
                 }
-                newRed /= 9;
-                newGreen /= 9;
-                newBlue /= 9;
+                newRed /= reductionScale * reductionScale;
+                newGreen /= reductionScale * reductionScale;
+                newBlue /= reductionScale * reductionScale;
     
                 resultColor[counter] = new Color32((byte) newRed, (byte) newGreen, (byte) newBlue, 1);
                 counter++;

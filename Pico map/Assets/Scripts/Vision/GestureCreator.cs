@@ -102,10 +102,10 @@ public class GestureCreator : MonoBehaviour {
     // Find the position of where the particular color was found and translate it
     // to Unity space.
     Vector3 GetPos(int i){
-        float x = (i % (imageCapture.cameraWidth / 3));
-        float y = Mathf.Floor (i / (imageCapture.cameraHeight / 3));
-        x = x * 1920 / ((float)imageCapture.cameraWidth) * 4 - (1920/2);
-        y = y * 1080 / ((float)imageCapture.cameraHeight) * 4 - (1080/2);
+        float x = (i % (imageCapture.cameraWidth / imageCapture.reductionScale));
+        float y = Mathf.Floor (i / (imageCapture.cameraHeight / imageCapture.reductionScale));
+        x = x * sceneWidth / ((float)imageCapture.cameraWidth) * 4 - (sceneWidth/2);
+        y = y * sceneHeight / ((float)imageCapture.cameraHeight) * 4 - (sceneHeight/2);
         Vector3 final = new Vector3 (x, y, 400);
         print(x + " " + y);
         return final;
