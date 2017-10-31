@@ -73,10 +73,11 @@ public class ImageCapture : MonoBehaviour {
         print(cols.Length);
         int iterations = 0;
         int rangeCount = 0;
-        for(int i = 0; i < cameraWidth; i+=10){
-            for(int j = 0; j < cameraHeight; j+=10) {
+        for(int j = 0; j < cameraHeight/3; j++){
+            for(int i = 0; i < cameraWidth/3; i++) {
                 iterations += 1;
-                if (inRange(cols[i*(j+1) + j], trackingColor)) {
+                //Array is weirdly arranged.  Start at bottom left and work up.
+                if (inRange(cols[j*(cameraWidth/3) + i], trackingColor)) {
                     rangeCount += 1;
                     if (minX > i) minX = i;
                     if (maxX < i) maxX = i;
@@ -87,10 +88,10 @@ public class ImageCapture : MonoBehaviour {
         }
 
         // Scale to projector
-        minX = (1920 / cameraWidth) * minX;
-        maxX = (1920 / cameraWidth) * maxX;
-        minY = (1020 / cameraHeight) * minY;
-        maxY = (1020 / cameraHeight) * maxY;
+        minX = (1920 / cameraWidth / 3) * minX;
+        maxX = (1920 / cameraWidth / 3) * maxX;
+        minY = (1020 / cameraHeight / 3) * minY;
+        maxY = (1020 / cameraHeight / 3) * maxY;
 
         // Offset to center
         minX = minX - (1920/2);
