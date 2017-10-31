@@ -438,7 +438,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!114 &338629457
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -454,7 +454,7 @@ MonoBehaviour:
   cameraWidth: 640
   cameraHeight: 480
   setupComplete: 0
-  trackingColor: {r: 1, g: 0.47058824, b: 0.47058824, a: 1}
+  trackingColor: {r: 1, g: 0.31034485, b: 0, a: 1}
   corners:
   - {fileID: 417185712}
   - {fileID: 164000909}
@@ -1357,7 +1357,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!23 &1223094674
 MeshRenderer:
   m_ObjectHideFlags: 0
