@@ -89,10 +89,10 @@ public class ImageCapture : MonoBehaviour {
         }
 
         // Scale to projector
-        minX = (1920 / cameraWidth / 3) * minX;
-        maxX = (1920 / cameraWidth / 3) * maxX;
-        minY = (1020 / cameraHeight / 3) * minY;
-        maxY = (1020 / cameraHeight / 3) * maxY;
+        minX = (1920 / cameraWidth / reductionScale) * minX;
+        maxX = (1920 / cameraWidth / reductionScale) * maxX;
+        minY = (1020 / cameraHeight / reductionScale) * minY;
+        maxY = (1020 / cameraHeight / reductionScale) * maxY;
 
         // Offset to center
         minX = minX - (1920/2);
