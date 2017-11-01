@@ -74,11 +74,11 @@ public class ImageCapture : MonoBehaviour {
         print(cols.Length);
         int iterations = 0;
         int rangeCount = 0;
-        for(int j = 0; j < cameraHeight/3; j++){
-            for(int i = 0; i < cameraWidth/3; i++) {
+        for(int j = 0; j < cameraHeight/reductionScale; j++){
+            for(int i = 0; i < cameraWidth/reductionScale; i++) {
                 iterations += 1;
                 //Array is weirdly arranged.  Start at bottom left and work up.
-                if (inRange(cols[j*(cameraWidth/3) + i], trackingColor)) {
+                if (inRange(cols[j*(cameraWidth/reductionScale) + i], trackingColor)) {
                     rangeCount += 1;
                     if (minX > i) minX = i;
                     if (maxX < i) maxX = i;
@@ -152,7 +152,7 @@ public class ImageCapture : MonoBehaviour {
     Color32[] PoolColors (Color32[] startData, int width, int height) {
         Color32[] resultColor = new Color32[(width / reductionScale) * (height / reductionScale)];
         int counter = 0;
-        for(int j = 0; j < height; j += reductionScale) {
+        for(int j = 0; j < height - reductionScale - 1; j += reductionScale) {
             for(int i = 0; i < width - reductionScale - 1; i += reductionScale) {
                 float newRed = 0;
                 float newGreen = 0;
