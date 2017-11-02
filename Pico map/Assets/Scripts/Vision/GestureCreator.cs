@@ -71,17 +71,15 @@ public class GestureCreator : MonoBehaviour {
     // Basically the idea is that every point adds "weight" to the object
     void ProcessImage() {
         //For summing x and y values, then getting averages.
-        long xTrue = 0;
-        long yTrue = 0;
-        Vector3 colorPosition;
+        float xTrue = 0;
+        float yTrue = 0;
         int numTrue = 0;
         
         //Find all the valid spots
         for(int i = 0; i < lastFrame.Length; i++) {
             if (inRange (lastFrame[i], targetColor)) {
-                colorPosition = GetPos(i);
-                xTrue += colorPosition.x;
-                yTrue += colorPosition.y;
+                xTrue += i % (imageCapture.cameraWidth / imageCapture.reductionScale);
+                yTrue += i / (imageCapture.cameraHeight/ imageCapture.reductionScale);
                 numTrue++;
             }
         }
@@ -90,7 +88,8 @@ public class GestureCreator : MonoBehaviour {
         if(numTrue != 0) {
             xTrue = xTrue / numTrue;
             yTrue = yTrue / numTrue;
-            myIcon.transform.position = new Vector3(xTrue, -625, yTrue);
+            print(xTrue + " " + yTrue);
+            myIcon.transform.position = GetPos(xTrue, yTrue);
         }
         else
             myIcon.transform.position = new Vector3(0,-625, 0);
@@ -119,17 +118,13 @@ public class GestureCreator : MonoBehaviour {
 
     // Find the position of where the particular color was found and translate it
     // to Unity space.
-    Vector3 GetPos(int i){
-        float x = (i % (imageCapture.cameraWidth / imageCapture.reductionScale));
-        float y = Mathf.Floor (i / (imageCapture.cameraHeight / imageCapture.reductionScale));
-        x = x * sceneWidth / ((float)imageCapture.cameraWidth) * (imageCapture.reductionScale * (float)1.333) - (sceneWidth/2);
-        y = y * sceneHeight / ((float)imageCapture.cameraHeight) * (imageCapture.reductionScale * (float)1.666) - (sceneHeight/2);
-        Vector3 final = new Vector3 (x, y, 400);
+    Vector3 GetPos(float x, float y){
+        //float x = (i % (imageCapture.cameraWidth / imageCapture.reductionScale));
+        //float y = Mathf.Floor (i / (imageCapture.cameraHeight / imageCapture.reductionScale));
+        x = x * sceneWidth / ((float)imageCapture.cameraWidth) / imageCapture.reductionScale * (float)1.333 - (sceneWidth/2);
+        y = y * sceneHeight / ((float)imageCapture.cameraHeight) / imageCapture.reductionScale * (float)1.666 - (sceneHeight/2);
+        Vector3 final = new Vector3 (x, -625, y);
         print(x + " " + y);
         return final;
     }
-
-    // Vector3 GetMidpoint(Vector3 start, Vector3 end) {
-    //     return new Vector3((start.x + end.x) / 2, -625, (start.y + end.y) / 2);
-    // }
 }
