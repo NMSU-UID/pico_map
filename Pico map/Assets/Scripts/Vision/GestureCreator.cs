@@ -68,14 +68,32 @@ public class GestureCreator : MonoBehaviour {
 
     // Search every pixel in the lastFrame array and check if it's
     // within out accepted range of target color.
+    // Basically the idea is that every point adds "weight" to the object
     void ProcessImage() {
+        //For summing x and y values, then getting averages.
+        long xTrue = 0;
+        long yTrue = 0;
+        Vector3 colorPosition;
+        int numTrue = 0;
+        
+        //Find all the valid spots
         for(int i = 0; i < lastFrame.Length; i++) {
             if (inRange (lastFrame[i], targetColor)) {
-
-                myIcon.transform.position = GetMidpoint(myIcon.transform.position, GetPos(i));
-                break;
+                colorPosition = GetPos(i);
+                xTrue += colorPosition.x;
+                yTrue += colorPosition.y;
+                numTrue++;
             }
         }
+        
+        //IF we found points, we can do this math.  If not, then we need to simply go to 0,0 for now.
+        if(numTrue != 0) {
+            xTrue = xTrue / numTrue;
+            yTrue = yTrue / numTrue;
+            myIcon.transform.position = new Vector3(xTrue, -625, yTrue);
+        }
+        else
+            myIcon.transform.position = new Vector3(0,-625, 0);
     }
 
     // Checks if the current pixel is with colorRange of the target color.
@@ -111,7 +129,7 @@ public class GestureCreator : MonoBehaviour {
         return final;
     }
 
-    Vector3 GetMidpoint(Vector3 start, Vector3 end) {
-        return new Vector3((start.x + end.x) / 2, -625, (start.y + end.y) / 2);
-    }
+    // Vector3 GetMidpoint(Vector3 start, Vector3 end) {
+    //     return new Vector3((start.x + end.x) / 2, -625, (start.y + end.y) / 2);
+    // }
 }
