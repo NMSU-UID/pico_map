@@ -1,4 +1,5 @@
 .DS_Store*
+.env
 
 # The following is taken from: https://gist.github.com/teocomi/fbd014c26c63c7c1055d025e2339dea7
 
