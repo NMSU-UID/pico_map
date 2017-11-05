@@ -42,7 +42,6 @@ public class GestureCreator : MonoBehaviour {
     public int sceneWidth;
     public int sceneHeight;
 
-    private Color32[] lastFrame;
     private float timer = 0;
 
     void Start(){
@@ -54,7 +53,6 @@ public class GestureCreator : MonoBehaviour {
     // like 3 seconds because of the high overhead of processing but as we get quicker
     // we'll be able to lower it substantially.
     void Update () {
-
         timer += Time.deltaTime;
         if (timer > processRate) {
             timer = 0;
@@ -62,13 +60,13 @@ public class GestureCreator : MonoBehaviour {
                 return;
             }
             lastFrame = imageCapture.GetColor();
-            ProcessImage();
+            ProcessImage(lastFrame);
         }
     }
 
     // Search every pixel in the lastFrame array and check if it's
     // within out accepted range of target color.
-    void ProcessImage() {
+    void ProcessImage(Color32[] lastFrame) {
         for(int i = 0; i < lastFrame.Length; i++) {
             if (inRange (lastFrame[i], targetColor)) {
 
