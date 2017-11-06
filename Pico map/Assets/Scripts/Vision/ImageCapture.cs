@@ -28,13 +28,20 @@ public class ImageCapture : MonoBehaviour {
 
     public int cameraWidth;
     public int cameraHeight;
+    private int projectorWidth = 1920;
+    private int projectorHeight = 1020;
+    public int reductionScale = 3;
 
     private Color32[] data;
     public bool setupComplete = false;
 
+    Color32[] cols;
+    public Color trackingColor;
+    public List<Transform> corners;
+    public GameObject TrackingPlane;
+
     public void Start() {
         InitCam();
-        Show(true);
     }
 
     // This should become a cooroutine and handle map placement/scaling.
@@ -42,10 +49,7 @@ public class ImageCapture : MonoBehaviour {
         webCamTexture = new WebCamTexture();
 
         // webCamTexture.requestedFPS = 1;
-        webCamTexture.requestedWidth = cameraWidth;
-        webCamTexture.requestedHeight = cameraWidth;
         webCamTexture.Play();
-
         // this should be set using webCamTexture.width/height but it needs to wait
         // until initialization is done.
         // data = new Color32[cameraWidth * cameraHeight];
@@ -53,30 +57,29 @@ public class ImageCapture : MonoBehaviour {
         webCamObject.GetComponent<Renderer>().material.mainTexture = webCamTexture;
         StartCoroutine("ZoomCameraTexture");
     }
-    Color32[] cols;
-    public Color trackingColor;
-    public List<Transform> corners;
-    public GameObject TrackingPlane;
+
     IEnumerator ZoomCameraTexture(){
         // find edges
         cols = GetColor();
-        while (cols.Length < 1) {
+        while (cols.Length < 100) {
             yield return new WaitForSeconds(3);
+            cameraWidth = webCamTexture.width;
+            cameraHeight = webCamTexture.height;
             cols = GetColor();
-
         }
+        print("cols: " + cols.Length);
 
-        float minX = 1000;
+        float minX = cameraWidth;
         float maxX = 0;
-        float minY = 1000;
+        float minY = cameraHeight;
         float maxY = 0;
-        print(cols.Length);
         int iterations = 0;
         int rangeCount = 0;
-        for(int i = 0; i < cameraWidth; i+=10){
-            for(int j = 0; j < cameraHeight; j+=10) {
+        for(int j = 0; j < cameraHeight/reductionScale; j++){
+            for(int i = 0; i < cameraWidth/reductionScale; i++) {
                 iterations += 1;
-                if (inRange(cols[i*(j+1) + j], trackingColor)) {
+                //Array is weirdly arranged.  Start at bottom left and work up.
+                if (inRange(cols[j*(cameraWidth/reductionScale) + i], trackingColor)) {
                     rangeCount += 1;
                     if (minX > i) minX = i;
                     if (maxX < i) maxX = i;
@@ -85,18 +88,18 @@ public class ImageCapture : MonoBehaviour {
                 }
             }
         }
-
+        print(projectorWidth + " " + projectorHeight + " " + minX + " " + maxX + " " + minY + " " + maxY);
         // Scale to projector
-        minX = (1920 / cameraWidth) * minX;
-        maxX = (1920 / cameraWidth) * maxX;
-        minY = (1020 / cameraHeight) * minY;
-        maxY = (1020 / cameraHeight) * maxY;
+        minX = (projectorWidth / cameraWidth) * minX;
+        maxX = (projectorWidth / cameraWidth) * maxX;
+        minY = (projectorHeight / cameraHeight) * minY;
+        maxY = (projectorHeight / cameraHeight) * maxY;
 
         // Offset to center
-        minX = minX - (1920/2);
-        maxX = maxX - (1920/2);
-        minY = minY - (1080/2);
-        maxY = maxY - (1080/2);
+        minX = minX - (projectorWidth/2);
+        maxX = maxX - (projectorWidth/2);
+        minY = minY - (projectorHeight/2);
+        maxY = maxY - (projectorHeight/2);
 
         // Calculate middle
         // float x = - (1920 / 2) + (minX * 3);
@@ -109,59 +112,65 @@ public class ImageCapture : MonoBehaviour {
         corners[3].position = new Vector3(maxX, -600, minY); //lower right
 
         // Scale plane
-        float xScale = webCamObject.transform.localScale.x * (1920 / (maxX - minX));
-        float zScale = webCamObject.transform.localScale.y * (1080 / (maxY - minY));
+        float xScale = webCamObject.transform.localScale.x * (projectorWidth / (maxX - minX));
+        float zScale = webCamObject.transform.localScale.y * (projectorHeight / (maxY - minY));
         webCamObject.transform.localScale = new Vector3(xScale, zScale, 1);
 
         TrackingPlane.SetActive(false);
         setupComplete = true;
     }
 
-    // Shows / hides the texture. Useful for debugging.
-    public void Show(bool bShow) {
-        gameObject.SetActive(bShow);
-
-        if(webCamTexture == null) {
-            InitCam();
-        }
-
-        webCamTexture.Play();
-    }
-
     public Color32[] GetColor () {
         if (webCamTexture.width < 100) {
+            print("underscan");
             return new Color32[0];
         }
-        cameraWidth = webCamTexture.width;
-        cameraHeight = webCamTexture.height;
-        // Color32[] raw = webCamTexture.GetPixels32(data);
-        //TODO: PoolColors not currently working. we should be returning pass
-        // Color32[] pass = PoolColors(raw, cameraWidth, cameraHeight);
-        return webCamTexture.GetPixels32();
+
+        Color32[] raw = webCamTexture.GetPixels32(data);
+        // Color32[] pass = PoolColors(raw);
+        return raw;
     }
 
-    // BUG: This doesn't currently work and is hurting our frame rate :(
     // This function is ment to ease in the tracking of objects. It's essentially
     // a maxPool function of size 3x3. It skips every three pixels horizontally
     // and vertically then averages the surronding pixels. Given an image
     // of ratio 1280 x 720, it will transform to 426 x 240.
     // TODO: This currently only works for 1280 x 720 images, we should make This
-    // dynamic for different cameras or multiple passes.
-    // Color32[] PoolColors (Color32[] startData, int width, int height) {
-    //     Color32[] resultColor = new Color32[(width / 3) * (height / 3)];
-    //     int counter = 0;
-    //     for(int i = 1; i < width - 1; i += 3) {
-    //         for(int j = 1; j < height - 1; j += 3) {
-    //             float newRed = (startData[i * j].r + startData[i * j + 1].r + startData[i * j - 1].r + startData[(i - 1) * j].r + startData[(i + 1) * j].r) / 5;
-    //             float newGreen = (startData[i * j].g + startData[i * j + 1].g + startData[i * j - 1].g + startData[(i - 1) * j].g + startData[(i + 1) * j].g) / 5;
-    //             float newBlue = (startData[i * j].b + startData[i * j + 1].b + startData[i * j - 1].b + startData[(i - 1) * j].b + startData[(i + 1) * j].b) / 5;
-    //
-    //             resultColor[counter] = new Color32((byte) newRed, (byte) newGreen, (byte) newBlue, 1);
-    //             counter++;
-    //         }
-    //     }
-    //     return resultColor;
-    // }
+    // dynamic for different cameras or multiple passes.  Also, if it continues to hurt
+    // framerate, we can try threading it.
+    Color32[] PoolColors (Color32[] startData) {
+        Color32[] resultColor = new Color32[(cameraWidth / reductionScale) * (cameraHeight / reductionScale)];
+        print(startData.Length);
+        print (resultColor.Length);
+        int counter = 0;
+        int res = 0;
+        for(int i = 1; i < cameraWidth/reductionScale; i += reductionScale) {
+            for(int j = 1; j < cameraHeight/reductionScale; j += reductionScale) {
+                float newRed = 0;
+                float newGreen = 0;
+                float newBlue = 0;
+                for(int k = 0; k < reductionScale; k++) {
+                    for(int l = 0; l < reductionScale; l++) {
+                        // i * cameraWidth + j: Our current index
+                        // (k-1)*cameraWidth: width line before, current, and after TODO: change this dynamic to use numbers other than 3. NOTE: should always be odd cause even is hard lol
+                        //(l-1): height line before, current, and ater.
+                        int curIndex = (i * cameraWidth + j) + ((k-1)*cameraWidth) + (l-1);
+                        newRed += startData[curIndex].r;
+                        newGreen += startData[curIndex].g;
+                        newBlue += startData[curIndex].b;
+                    }
+                }
+                newRed /= reductionScale * reductionScale;
+                newGreen /= reductionScale * reductionScale;
+                newBlue /= reductionScale * reductionScale;
+
+                resultColor[counter] = new Color32((byte) newRed, (byte) newGreen, (byte) newBlue, 1);
+                counter++;
+                res = i * j;
+            }
+        }
+        return resultColor;
+    }
 
     bool inRange(Color input, Color targetColor){
 
@@ -176,5 +185,4 @@ public class ImageCapture : MonoBehaviour {
         }
         return true;
     }
-
 }

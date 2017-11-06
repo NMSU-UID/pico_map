@@ -42,7 +42,6 @@ public class GestureCreator : MonoBehaviour {
     public int sceneWidth;
     public int sceneHeight;
 
-    private Color32[] lastFrame;
     private float timer = 0;
 
     void Start(){
@@ -54,7 +53,6 @@ public class GestureCreator : MonoBehaviour {
     // like 3 seconds because of the high overhead of processing but as we get quicker
     // we'll be able to lower it substantially.
     void Update () {
-
         timer += Time.deltaTime;
         if (timer > processRate) {
             timer = 0;
@@ -62,13 +60,13 @@ public class GestureCreator : MonoBehaviour {
                 return;
             }
             lastFrame = imageCapture.GetColor();
-            ProcessImage();
+            ProcessImage(lastFrame);
         }
     }
 
     // Search every pixel in the lastFrame array and check if it's
     // within out accepted range of target color.
-    void ProcessImage() {
+    void ProcessImage(Color32[] lastFrame) {
         for(int i = 0; i < lastFrame.Length; i++) {
             if (inRange (lastFrame[i], targetColor)) {
 
@@ -102,10 +100,10 @@ public class GestureCreator : MonoBehaviour {
     // Find the position of where the particular color was found and translate it
     // to Unity space.
     Vector3 GetPos(int i){
-        float x = (i % imageCapture.cameraWidth);
-        float y = Mathf.Floor (i / imageCapture.cameraHeight);
-        x = x * 4 - (1920 / 2);
-        y = y *  3 - (1080 / 2);
+        float x = (i % (imageCapture.cameraWidth / imageCapture.reductionScale));
+        float y = Mathf.Floor (i / (imageCapture.cameraHeight / imageCapture.reductionScale));
+        x = x * sceneWidth / ((float)imageCapture.cameraWidth) * (imageCapture.reductionScale * (float)1.333) - (sceneWidth/2);
+        y = y * sceneHeight / ((float)imageCapture.cameraHeight) * (imageCapture.reductionScale * (float)1.666) - (sceneHeight/2);
         Vector3 final = new Vector3 (x, y, 400);
         print(x + " " + y);
         return final;
