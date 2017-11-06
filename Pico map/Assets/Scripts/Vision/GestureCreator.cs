@@ -33,6 +33,7 @@ public class GestureCreator : MonoBehaviour {
 
     public ImageCapture imageCapture;
     public GameObject myIcon;
+    Rigidbody iconRb;
     public Color32 targetColor;
     public float colorRange;
     // in s
@@ -45,14 +46,13 @@ public class GestureCreator : MonoBehaviour {
     private float timer = 0;
 
     void Start(){
-        // cameraWidth = imageCapture.cameraWidth;
-        // cameraHeight = imageCapture.cameraHeight;
+        iconRb = myIcon.GetComponent<Rigidbody>();
     }
 
     // Timer acts as our image capture rate. I currently set this to something
     // like 3 seconds because of the high overhead of processing but as we get quicker
     // we'll be able to lower it substantially.
-    void Update () {
+    void FixedUpdate () {
         timer += Time.deltaTime;
         if (timer > processRate) {
             timer = 0;
@@ -70,8 +70,8 @@ public class GestureCreator : MonoBehaviour {
         for(int i = 0; i < lastFrame.Length; i++) {
             if (inRange (lastFrame[i], targetColor)) {
                 // myIcon.transform.position = GetMidpoint(myIcon.transform.position, GetPos(i));
-                print(lastFrame[i]);
-                myIcon.transform.position = GetPos(i);
+                // print(lastFrame[i]);
+                myIcon.transform.position = GetDirection(i);
                 break;
             }
         }
@@ -93,14 +93,23 @@ public class GestureCreator : MonoBehaviour {
 
     // Find the position of where the particular color was found and translate it
     // to Unity space.
-    Vector3 GetPos(int i){
+    Vector3 GetDirection(int i){
         float x = (i % imageCapture.cameraWidth);
         float y = Mathf.Floor (i / imageCapture.cameraHeight);
         x = x * 4 - 1280;
         y = y *  3 - (1080 / 2);
-        Vector3 final = new Vector3 (x, -640, y);
-        print(x + " " + y);
-        return final;
+
+
+        Vector3 targetPosition = new Vector3 (x, -640, y);
+        Vector3 heading = targetPosition - myIcon.transform.position;
+        float distance = heading.magnitude;
+        Vector3 newDirection = Vector3.MoveTowards(iconRb.velocity, heading, Time.deltaTime * 1000);
+        print (newDirection);
+
+        // Normalized values
+        // print(heading / distance);
+
+        return targetPosition;
     }
 
     Vector3 GetMidpoint(Vector3 start, Vector3 end) {
