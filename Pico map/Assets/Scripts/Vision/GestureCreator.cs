@@ -88,6 +88,7 @@ public class GestureCreator : MonoBehaviour {
         if (Mathf.Abs(input[2] - targetColor[2]) > 0.2) {
             return false;
         }
+        print("inRange");
         return true;
     }
 
