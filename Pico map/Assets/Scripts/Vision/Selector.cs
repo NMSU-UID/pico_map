@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class Selector : MonoBehaviour {
 
@@ -11,6 +12,7 @@ public class Selector : MonoBehaviour {
      */
     public ImageCapture imageCapture;
     public RectTransform selector;
+    public List<Slider> lightSliders;
     public Color32 targetColor;
     public float colorRange;
     // in s
@@ -43,24 +45,49 @@ public class Selector : MonoBehaviour {
         // print(lastFrame.Length);
         for(int i = 0; i < lastFrame.Length; i++) {
             if (inRange (lastFrame[i], targetColor)) {
-                selector.anchoredPosition = GetPosition(i);
+                int loc = GetX(i);
+                selector.anchoredPosition = new Vector3(-88, positions[loc], 0);
+
+                float y = GetY(i);
+                float clamppedValue;
+                float maxStep;
+                if (loc == 0) {
+                    clamppedValue = 510 * y;
+                    maxStep = 10;
+                } else if (loc == 1){
+                    clamppedValue = 8 * y + 2;
+                    maxStep = 0.1f;
+                } else {
+                    clamppedValue = 10 * y;
+                    maxStep = 0.3f;
+                }
+                float sloppedValue = clamppedValue > lightSliders[loc].value ? maxStep : - maxStep;
+
+                print(clamppedValue + " " + lightSliders[loc] + " " + sloppedValue);
+                lightSliders[loc].value = lightSliders[loc].value + sloppedValue;
                 break;
             }
         }
     }
 
-
-    Vector3 GetPosition(int i){
+    int GetX(int i){
         float y = Mathf.Floor (i / imageCapture.cameraHeight);
         int loc = 1;
-        if (y < 80) {
+        if (y < 70) {
             loc = 0;
         }
-        if (y > 120) {
+        if (y > 140) {
             loc = 2;
         }
-        print(y);
-        return new Vector3(-88, positions[loc], 0);
+
+        return loc;
+    }
+
+    float GetY(int i ) {
+        float x = (i % imageCapture.cameraWidth);
+        x = x / 600;
+        // print(x);
+        return x;
     }
 
 	// Checks if the current pixel is with colorRange of the target color.
