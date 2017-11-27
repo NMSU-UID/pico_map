@@ -29,103 +29,24 @@ public class ImageCapture : MonoBehaviour {
     public int cameraWidth;
     public int cameraHeight;
 
-    private Color32[] data;
     public bool setupComplete = false;
 
     public void Start() {
         InitCam();
-        Show(true);
     }
 
     // This should become a cooroutine and handle map placement/scaling.
     void InitCam() {
+        gameObject.SetActive(true);
         webCamTexture = new WebCamTexture();
 
-        // webCamTexture.requestedFPS = 1;
         webCamTexture.requestedWidth = cameraWidth;
         webCamTexture.requestedHeight = cameraWidth;
         webCamTexture.Play();
 
-        // this should be set using webCamTexture.width/height but it needs to wait
-        // until initialization is done.
-        // data = new Color32[cameraWidth * cameraHeight];
-
         webCamObject.GetComponent<Renderer>().material.mainTexture = webCamTexture;
-        StartCoroutine("ZoomCameraTexture");
-    }
-    Color32[] cols;
-    public Color trackingColor;
-    public List<Transform> corners;
-    public GameObject TrackingPlane;
-    IEnumerator ZoomCameraTexture(){
-        // find edges
-        cols = GetColor();
-        while (cols.Length < 1) {
-            yield return new WaitForSeconds(3);
-            cols = GetColor();
-
-        }
-
-        float minX = 1000;
-        float maxX = 0;
-        float minY = 1000;
-        float maxY = 0;
-        print(cols.Length);
-        int iterations = 0;
-        int rangeCount = 0;
-        for(int i = 0; i < cameraWidth; i+=10){
-            for(int j = 0; j < cameraHeight; j+=10) {
-                iterations += 1;
-                if (inRange(cols[i*(j+1) + j], trackingColor)) {
-                    rangeCount += 1;
-                    if (minX > i) minX = i;
-                    if (maxX < i) maxX = i;
-                    if (minY > j) minY = j;
-                    if (maxY < j) maxY = j;
-                }
-            }
-        }
-
-        // Scale to projector
-        minX = (1920 / cameraWidth) * minX;
-        maxX = (1920 / cameraWidth) * maxX;
-        minY = (1020 / cameraHeight) * minY;
-        maxY = (1020 / cameraHeight) * maxY;
-
-        // Offset to center
-        minX = minX - (1920/2);
-        maxX = maxX - (1920/2);
-        minY = minY - (1080/2);
-        maxY = maxY - (1080/2);
-
-        // Calculate middle
-        // float x = - (1920 / 2) + (minX * 3);
-        // float z = (1080 / 2) - (minY * 3);
-
-        // Center image
-        corners[0].position = new Vector3(minX, -600, maxY); //upper left
-        corners[1].position = new Vector3(maxX, -600, maxY); //upper right
-        corners[2].position = new Vector3(minX, -600, minY); //lower left
-        corners[3].position = new Vector3(maxX, -600, minY); //lower right
-
-        // Scale plane
-        float xScale = webCamObject.transform.localScale.x * (1920 / (maxX - minX));
-        float zScale = webCamObject.transform.localScale.y * (1080 / (maxY - minY));
-        webCamObject.transform.localScale = new Vector3(xScale, zScale, 1);
-
-        TrackingPlane.SetActive(false);
+        // StartCoroutine("ZoomCameraTexture");
         setupComplete = true;
-    }
-
-    // Shows / hides the texture. Useful for debugging.
-    public void Show(bool bShow) {
-        gameObject.SetActive(bShow);
-
-        if(webCamTexture == null) {
-            InitCam();
-        }
-
-        webCamTexture.Play();
     }
 
     public Color32[] GetColor () {
@@ -139,6 +60,84 @@ public class ImageCapture : MonoBehaviour {
         // Color32[] pass = PoolColors(raw, cameraWidth, cameraHeight);
         return webCamTexture.GetPixels32();
     }
+
+    // bool inRange(Color input, Color targetColor){
+    //     if (Mathf.Abs(input[0] - targetColor[0]) > 0.2) {
+    //         return false;
+    //     }
+    //     if (Mathf.Abs(input[1] - targetColor[1]) > 0.2) {
+    //         return false;
+    //     }
+    //     if (Mathf.Abs(input[2] - targetColor[2]) > 0.2) {
+    //         return false;
+    //     }
+    //     return true;
+    // }
+    // Color32[] cols;
+    // public Color trackingColor;
+    // public List<Transform> corners;
+    // public GameObject TrackingPlane;
+    // IEnumerator ZoomCameraTexture(){
+    //     // find edges
+    //     cols = GetColor();
+    //     while (cols.Length < 1) {
+    //         yield return new WaitForSeconds(3);
+    //         cols = GetColor();
+    //
+    //     }
+    //
+    //     float minX = 1000;
+    //     float maxX = 0;
+    //     float minY = 1000;
+    //     float maxY = 0;
+    //     print(cols.Length);
+    //     int iterations = 0;
+    //     int rangeCount = 0;
+    //     for(int i = 0; i < cameraWidth; i+=10){
+    //         for(int j = 0; j < cameraHeight; j+=10) {
+    //             iterations += 1;
+    //             if (inRange(cols[i*(j+1) + j], trackingColor)) {
+    //                 rangeCount += 1;
+    //                 if (minX > i) minX = i;
+    //                 if (maxX < i) maxX = i;
+    //                 if (minY > j) minY = j;
+    //                 if (maxY < j) maxY = j;
+    //             }
+    //         }
+    //     }
+    //
+    //     // Scale to projector
+    //     minX = (1920 / cameraWidth) * minX;
+    //     maxX = (1920 / cameraWidth) * maxX;
+    //     minY = (1020 / cameraHeight) * minY;
+    //     maxY = (1020 / cameraHeight) * maxY;
+    //
+    //     // Offset to center
+    //     minX = minX - (1920/2);
+    //     maxX = maxX - (1920/2);
+    //     minY = minY - (1080/2);
+    //     maxY = maxY - (1080/2);
+    //
+    //     // Calculate middle
+    //     // float x = - (1920 / 2) + (minX * 3);
+    //     // float z = (1080 / 2) - (minY * 3);
+    //
+    //     // Center image
+    //     corners[0].position = new Vector3(minX, -600, maxY); //upper left
+    //     corners[1].position = new Vector3(maxX, -600, maxY); //upper right
+    //     corners[2].position = new Vector3(minX, -600, minY); //lower left
+    //     corners[3].position = new Vector3(maxX, -600, minY); //lower right
+    //
+    //     // Scale plane
+    //     float xScale = webCamObject.transform.localScale.x * (1920 / (maxX - minX));
+    //     float zScale = webCamObject.transform.localScale.y * (1080 / (maxY - minY));
+    //     webCamObject.transform.localScale = new Vector3(xScale, zScale, 1);
+    //
+    //     TrackingPlane.SetActive(false);
+    //     setupComplete = true;
+    // }
+
+
 
     // BUG: This doesn't currently work and is hurting our frame rate :(
     // This function is ment to ease in the tracking of objects. It's essentially
@@ -162,19 +161,4 @@ public class ImageCapture : MonoBehaviour {
     //     }
     //     return resultColor;
     // }
-
-    bool inRange(Color input, Color targetColor){
-
-        if (Mathf.Abs(input[0] - targetColor[0]) > 0.2) {
-            return false;
-        }
-        if (Mathf.Abs(input[1] - targetColor[1]) > 0.2) {
-            return false;
-        }
-        if (Mathf.Abs(input[2] - targetColor[2]) > 0.2) {
-            return false;
-        }
-        return true;
-    }
-
 }

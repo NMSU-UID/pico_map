@@ -236,11 +236,11 @@ MonoBehaviour:
   myIcon: {fileID: 1382244158}
   targetColor:
     serializedVersion: 2
-    rgba: 43007
+    rgba: 2456815
   colorRange: 0.3
   processRate: 0.1
-  sceneWidth: 1660
-  sceneHeight: 865
+  sceneWidth: 1920
+  sceneHeight: 1020
 --- !u!1 &300948536
 GameObject:
   m_ObjectHideFlags: 0
@@ -356,7 +356,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!23 &318457482
 MeshRenderer:
   m_ObjectHideFlags: 0
@@ -454,13 +454,6 @@ MonoBehaviour:
   cameraWidth: 640
   cameraHeight: 480
   setupComplete: 0
-  trackingColor: {r: 1, g: 0.47058824, b: 0.47058824, a: 1}
-  corners:
-  - {fileID: 417185712}
-  - {fileID: 164000909}
-  - {fileID: 1296463558}
-  - {fileID: 1703242836}
-  TrackingPlane: {fileID: 318457481}
 --- !u!4 &338629458
 Transform:
   m_ObjectHideFlags: 0
@@ -1125,7 +1118,6 @@ Transform:
   - {fileID: 595205214}
   - {fileID: 434564242}
   - {fileID: 1480954143}
-  - {fileID: 2131347866}
   m_Father: {fileID: 0}
   m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -1138,7 +1130,6 @@ GameObject:
   m_Component:
   - component: {fileID: 917935322}
   - component: {fileID: 917935321}
-  - component: {fileID: 917935320}
   - component: {fileID: 917935319}
   m_Layer: 0
   m_Name: Background
@@ -1179,20 +1170,6 @@ MeshRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
---- !u!64 &917935320
-MeshCollider:
-  m_ObjectHideFlags: 0
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 0}
-  m_GameObject: {fileID: 917935318}
-  m_Material: {fileID: 0}
-  m_IsTrigger: 0
-  m_Enabled: 1
-  serializedVersion: 2
-  m_Convex: 0
-  m_InflateMesh: 0
-  m_SkinWidth: 0.01
-  m_Mesh: {fileID: 10210, guid: 0000000000000000e000000000000000, type: 0}
 --- !u!33 &917935321
 MeshFilter:
   m_ObjectHideFlags: 0
@@ -1505,6 +1482,7 @@ GameObject:
   - component: {fileID: 1382244160}
   - component: {fileID: 1382244159}
   - component: {fileID: 1382244162}
+  - component: {fileID: 1382244163}
   m_Layer: 0
   m_Name: Cube
   m_TagString: Untagged
@@ -1576,6 +1554,21 @@ BoxCollider:
   serializedVersion: 2
   m_Size: {x: 1.0000001, y: 1.0000001, z: 1}
   m_Center: {x: 0, y: 0, z: 0}
+--- !u!54 &1382244163
+Rigidbody:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 1382244158}
+  serializedVersion: 2
+  m_Mass: 1
+  m_Drag: 0
+  m_AngularDrag: 0
+  m_UseGravity: 0
+  m_IsKinematic: 1
+  m_Interpolate: 0
+  m_Constraints: 116
+  m_CollisionDetection: 0
 --- !u!1 &1459021282
 GameObject:
   m_ObjectHideFlags: 0
@@ -2013,52 +2006,3 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!1 &2131347865
-GameObject:
-  m_ObjectHideFlags: 0
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 0}
-  serializedVersion: 5
-  m_Component:
-  - component: {fileID: 2131347866}
-  - component: {fileID: 2131347868}
-  - component: {fileID: 2131347867}
-  m_Layer: 0
-  m_Name: topWall (1)
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!4 &2131347866
-Transform:
-  m_ObjectHideFlags: 0
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 0}
-  m_GameObject: {fileID: 2131347865}
-  m_LocalRotation: {x: -0, y: -0, z: 0.7071068, w: 0.7071068}
-  m_LocalPosition: {x: 0, y: -742, z: 0}
-  m_LocalScale: {x: 20, y: 1920.0015, z: 1080}
-  m_Children: []
-  m_Father: {fileID: 778435238}
-  m_RootOrder: 12
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 90}
---- !u!65 &2131347867
-BoxCollider:
-  m_ObjectHideFlags: 0
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 0}
-  m_GameObject: {fileID: 2131347865}
-  m_Material: {fileID: 0}
-  m_IsTrigger: 0
-  m_Enabled: 1
-  serializedVersion: 2
-  m_Size: {x: 1, y: 1, z: 1}
-  m_Center: {x: 0, y: 0, z: 0}
---- !u!33 &2131347868
-MeshFilter:
-  m_ObjectHideFlags: 0
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 0}
-  m_GameObject: {fileID: 2131347865}
-  m_Mesh: {fileID: 10202, guid: 0000000000000000e000000000000000, type: 0}
