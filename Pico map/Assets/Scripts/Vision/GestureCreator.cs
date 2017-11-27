@@ -33,6 +33,7 @@ public class GestureCreator : MonoBehaviour {
 
     public ImageCapture imageCapture;
     public GameObject myIcon;
+    Rigidbody iconRb;
     public Color32 targetColor;
     public float colorRange;
     // in s
@@ -42,37 +43,35 @@ public class GestureCreator : MonoBehaviour {
     public int sceneWidth;
     public int sceneHeight;
 
-    private Color32[] lastFrame;
     private float timer = 0;
 
     void Start(){
-        // cameraWidth = imageCapture.cameraWidth;
-        // cameraHeight = imageCapture.cameraHeight;
+        iconRb = myIcon.GetComponent<Rigidbody>();
     }
 
     // Timer acts as our image capture rate. I currently set this to something
     // like 3 seconds because of the high overhead of processing but as we get quicker
     // we'll be able to lower it substantially.
-    void Update () {
-
+    void FixedUpdate () {
         timer += Time.deltaTime;
         if (timer > processRate) {
             timer = 0;
             if (imageCapture.setupComplete == false) {
                 return;
             }
-            lastFrame = imageCapture.GetColor();
-            ProcessImage();
+            Color32[] lastFrame = imageCapture.GetColor();
+            ProcessImage(lastFrame);
         }
     }
 
     // Search every pixel in the lastFrame array and check if it's
     // within out accepted range of target color.
-    void ProcessImage() {
+    void ProcessImage(Color32[] lastFrame) {
         for(int i = 0; i < lastFrame.Length; i++) {
             if (inRange (lastFrame[i], targetColor)) {
-
-                myIcon.transform.position = GetMidpoint(myIcon.transform.position, GetPos(i));
+                // myIcon.transform.position = GetMidpoint(myIcon.transform.position, GetPos(i));
+                // print(lastFrame[i]);
+                myIcon.transform.position = GetDirection(i);
                 break;
             }
         }
@@ -80,35 +79,38 @@ public class GestureCreator : MonoBehaviour {
 
     // Checks if the current pixel is with colorRange of the target color.
     bool inRange(Color input, Color targetColor){
-        bool redTru = false;
-        bool blueTru = false;
-        bool greenTru = false;
-        if (Mathf.Abs(input[0] - targetColor[0]) < colorRange) {
-            redTru = true;
-        }
-        if (Mathf.Abs(input[1] - targetColor[1]) < colorRange) {
-            blueTru = true;
-        }
-        if (Mathf.Abs(input[2] - targetColor[2]) < colorRange) {
-            greenTru = true;
-        }
-        if (redTru && blueTru && greenTru) {
-            return true;
-        } else {
+        if (Mathf.Abs(input[0] - targetColor[0]) > 0.2) {
             return false;
         }
+        if (Mathf.Abs(input[1] - targetColor[1]) > 0.2) {
+            return false;
+        }
+        if (Mathf.Abs(input[2] - targetColor[2]) > 0.2) {
+            return false;
+        }
+        print("inRange");
+        return true;
     }
 
     // Find the position of where the particular color was found and translate it
     // to Unity space.
-    Vector3 GetPos(int i){
+    Vector3 GetDirection(int i){
         float x = (i % imageCapture.cameraWidth);
         float y = Mathf.Floor (i / imageCapture.cameraHeight);
-        x = x * 4 - (1920 / 2);
+        x = x * 4 - 1280;
         y = y *  3 - (1080 / 2);
-        Vector3 final = new Vector3 (x, y, 400);
-        print(x + " " + y);
-        return final;
+
+
+        Vector3 targetPosition = new Vector3 (x, -640, y);
+        Vector3 heading = targetPosition - myIcon.transform.position;
+        float distance = heading.magnitude;
+        Vector3 newDirection = Vector3.MoveTowards(iconRb.velocity, heading, Time.deltaTime * 1000);
+        print (newDirection);
+
+        // Normalized values
+        // print(heading / distance);
+
+        return targetPosition;
     }
 
     Vector3 GetMidpoint(Vector3 start, Vector3 end) {
