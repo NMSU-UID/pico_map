@@ -1,6 +1,11 @@
 fileFormatVersion: 2
+<<<<<<< HEAD:Pico map/Assets/Materials/defaultTexture.mat.meta
 guid: 0450133edc28bd243a6a0068c8460432
 timeCreated: 1509118510
+=======
+guid: 3e943c192f6c04c83979d88d26f53ac1
+timeCreated: 1508713080
+>>>>>>> master:Pico map/Assets/Materials/tracking block.mat.meta
 licenseType: Free
 NativeFormatImporter:
   mainObjectFileID: 0
