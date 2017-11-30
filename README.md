@@ -15,3 +15,11 @@ Skeleton:
 https://www.assetstore.unity3d.com/en/#!/content/71087
 Troll:
 https://www.assetstore.unity3d.com/en/#!/content/13541
+
+Wizard:
+https://www.assetstore.unity3d.com/en/#!/content/103037
+
+Warrior:
+https://www.assetstore.unity3d.com/en/#!/content/44041
+
+Maps made by google.
