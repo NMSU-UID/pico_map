@@ -88,7 +88,6 @@ public class GestureCreator : MonoBehaviour {
         if (Mathf.Abs(input[2] - targetColor[2]) > 0.2) {
             return false;
         }
-        print("inRange");
         return true;
     }
 
@@ -105,7 +104,6 @@ public class GestureCreator : MonoBehaviour {
         Vector3 heading = targetPosition - myIcon.transform.position;
         float distance = heading.magnitude;
         Vector3 newDirection = Vector3.MoveTowards(iconRb.velocity, heading, Time.deltaTime * 1000);
-        print (newDirection);
 
         // Normalized values
         // print(heading / distance);
